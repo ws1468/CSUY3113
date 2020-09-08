@@ -26,7 +26,7 @@ float cloud_right = -3.75;
 float cloud_left = 3.75;
 
 float star_x = -3.75;
-float star_y = 3;
+float star_y = 3.75;
 float star_scale = 1.0;
 
 GLuint starTextureID;
@@ -112,9 +112,9 @@ void Update() {
     star_rotate += 90.f * deltaTime;
     star_rotatee += 80.f * deltaTime;
     
-    star_x += 2.0f * deltaTime;
-    star_y -= .5f * deltaTime;
-    star_scale += .2 * deltaTime;
+    star_x += 3.0f * deltaTime;
+    star_y -= .8f * deltaTime;
+    star_scale += .3 * deltaTime;
     
     starivMatrix = glm::mat4(1.0f);
     starivMatrix = glm::translate(starivMatrix, glm::vec3(star_x, star_y, 0.0f));

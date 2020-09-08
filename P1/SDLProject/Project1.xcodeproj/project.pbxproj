@@ -40,7 +40,7 @@
 		079F98882506F3A5009B0B05 /* cloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cloud.png; sourceTree = "<group>"; };
 		079F989A25071AE2009B0B05 /* starrrr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = starrrr.png; path = ../../starrrr.png; sourceTree = "<group>"; };
 		079F989C25071B38009B0B05 /* starrr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = starrr.png; path = ../../starrr.png; sourceTree = "<group>"; };
-		DBDF1B4F2323DE3F007CECB1 /* SDLProject */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SDLProject; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBDF1B4F2323DE3F007CECB1 /* Project1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Project1; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBDF1B522323DE3F007CECB1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		DBDF1B592323DE8D007CECB1 /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderProgram.h; sourceTree = "<group>"; };
 		DBDF1B5A2323DE8D007CECB1 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
@@ -73,7 +73,7 @@
 		DBDF1B462323DE3F007CECB1 = {
 			isa = PBXGroup;
 			children = (
-				DBDF1B512323DE3F007CECB1 /* SDLProject */,
+				DBDF1B512323DE3F007CECB1 /* Project1 */,
 				DBDF1B502323DE3F007CECB1 /* Products */,
 				DBDF1B5F2323DE92007CECB1 /* Frameworks */,
 			);
@@ -82,12 +82,12 @@
 		DBDF1B502323DE3F007CECB1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DBDF1B4F2323DE3F007CECB1 /* SDLProject */,
+				DBDF1B4F2323DE3F007CECB1 /* Project1 */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DBDF1B512323DE3F007CECB1 /* SDLProject */ = {
+		DBDF1B512323DE3F007CECB1 /* Project1 */ = {
 			isa = PBXGroup;
 			children = (
 				079F98882506F3A5009B0B05 /* cloud.png */,
@@ -100,7 +100,7 @@
 				DBDF1B5A2323DE8D007CECB1 /* stb_image.h */,
 				DBDF1B522323DE3F007CECB1 /* main.cpp */,
 			);
-			path = SDLProject;
+			path = Project1;
 			sourceTree = "<group>";
 		};
 		DBDF1B5F2323DE92007CECB1 /* Frameworks */ = {
@@ -118,9 +118,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		DBDF1B4E2323DE3F007CECB1 /* SDLProject */ = {
+		DBDF1B4E2323DE3F007CECB1 /* Project1 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DBDF1B562323DE3F007CECB1 /* Build configuration list for PBXNativeTarget "SDLProject" */;
+			buildConfigurationList = DBDF1B562323DE3F007CECB1 /* Build configuration list for PBXNativeTarget "Project1" */;
 			buildPhases = (
 				DBDF1B4B2323DE3F007CECB1 /* Sources */,
 				DBDF1B4C2323DE3F007CECB1 /* Frameworks */,
@@ -130,9 +130,9 @@
 			);
 			dependencies = (
 			);
-			name = SDLProject;
+			name = Project1;
 			productName = SDLProject;
-			productReference = DBDF1B4F2323DE3F007CECB1 /* SDLProject */;
+			productReference = DBDF1B4F2323DE3F007CECB1 /* Project1 */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -149,7 +149,7 @@
 					};
 				};
 			};
-			buildConfigurationList = DBDF1B4A2323DE3F007CECB1 /* Build configuration list for PBXProject "SDLProject" */;
+			buildConfigurationList = DBDF1B4A2323DE3F007CECB1 /* Build configuration list for PBXProject "Project1" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -161,7 +161,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DBDF1B4E2323DE3F007CECB1 /* SDLProject */,
+				DBDF1B4E2323DE3F007CECB1 /* Project1 */,
 			);
 		};
 /* End PBXProject section */
@@ -230,6 +230,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				"LD_MAP_FILE_PATH[arch=*]" = "$(TARGET_TEMP_DIR)/$(PRODUCT_NAME)-LinkMap-$(CURRENT_VARIANT)-$(CURRENT_ARCH).txt";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -327,7 +328,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DBDF1B4A2323DE3F007CECB1 /* Build configuration list for PBXProject "SDLProject" */ = {
+		DBDF1B4A2323DE3F007CECB1 /* Build configuration list for PBXProject "Project1" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DBDF1B542323DE3F007CECB1 /* Debug */,
@@ -336,7 +337,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DBDF1B562323DE3F007CECB1 /* Build configuration list for PBXNativeTarget "SDLProject" */ = {
+		DBDF1B562323DE3F007CECB1 /* Build configuration list for PBXNativeTarget "Project1" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DBDF1B572323DE3F007CECB1 /* Debug */,
