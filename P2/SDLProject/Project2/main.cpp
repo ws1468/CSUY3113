@@ -11,8 +11,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+//#define STB_IMAGE_IMPLEMENTATION
+//#include "stb_image.h"
 
 SDL_Window* displayWindow;
 bool gameIsRunning = true;
@@ -183,11 +183,11 @@ void Update() {
     rpaddleMatrix = glm::translate(rpaddleMatrix, right_position);
     
     //check for ball hitting bottom --> bounce up
-    if (ball_position.y >= 3.2){
+    if (ball_position.y >= 3.5){
         ball_movement.y = -3.0;
     }
     //check for ball hitting up --> bounce down
-    if (ball_position.y <= -3.2){
+    if (ball_position.y <= -3.5){
         ball_movement.y = 3.0;
     }
     //ball
