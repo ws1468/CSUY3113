@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0782F7F4253755E9007D17BA /* bounce.wav in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0782F7F3253755CF007D17BA /* bounce.wav */; };
+		0782F7F5253755EC007D17BA /* dooblydoo.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0782F7F2253755C4007D17BA /* dooblydoo.mp3 */; };
 		DBDF1B532323DE3F007CECB1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBDF1B522323DE3F007CECB1 /* main.cpp */; };
 		DBDF1B5E2323DE8D007CECB1 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBDF1B5D2323DE8D007CECB1 /* ShaderProgram.cpp */; };
 		DBDF1B612323DE9E007CECB1 /* shaders in CopyFiles */ = {isa = PBXBuildFile; fileRef = DBDF1B5C2323DE8D007CECB1 /* shaders */; };
@@ -25,12 +27,16 @@
 			dstSubfolderSpec = 6;
 			files = (
 				DBDF1B612323DE9E007CECB1 /* shaders in CopyFiles */,
+				0782F7F4253755E9007D17BA /* bounce.wav in CopyFiles */,
+				0782F7F5253755EC007D17BA /* dooblydoo.mp3 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0782F7F2253755C4007D17BA /* dooblydoo.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = dooblydoo.mp3; path = "../../../../CS3113-master/Assets/Audio/dooblydoo.mp3"; sourceTree = "<group>"; };
+		0782F7F3253755CF007D17BA /* bounce.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bounce.wav; path = "../../../../CS3113-master/Assets/Audio/bounce.wav"; sourceTree = "<group>"; };
 		DBDF1B4F2323DE3F007CECB1 /* Project2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Project2; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBDF1B522323DE3F007CECB1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		DBDF1B592323DE8D007CECB1 /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderProgram.h; sourceTree = "<group>"; };
@@ -81,6 +87,8 @@
 		DBDF1B512323DE3F007CECB1 /* Project2 */ = {
 			isa = PBXGroup;
 			children = (
+				0782F7F3253755CF007D17BA /* bounce.wav */,
+				0782F7F2253755C4007D17BA /* dooblydoo.mp3 */,
 				DBDF1B5B2323DE8D007CECB1 /* glm */,
 				DBDF1B5D2323DE8D007CECB1 /* ShaderProgram.cpp */,
 				DBDF1B592323DE8D007CECB1 /* ShaderProgram.h */,
