@@ -232,6 +232,8 @@ void Initialize() {
     state.enemies[0].speed = 1;
     state.enemies[0].aiType = WAITANDGO;
     state.enemies[0].aiState = IDLE;
+    state.enemies[0].width = .7f;
+
     
     //Left
     state.enemies[1].entityType = ENEMY;
@@ -240,6 +242,8 @@ void Initialize() {
     state.enemies[1].speed = 1;
     state.enemies[1].aiType = PATROL;
     state.enemies[1].aiState = WALKING;
+    state.enemies[1].width = .7f;
+
     
     //Right
     state.enemies[2].entityType = ENEMY;
@@ -249,6 +253,8 @@ void Initialize() {
     state.enemies[2].aiType = AGGRESSIVE;
     state.enemies[2].aiState = WALKING;
     state.enemies[2].acceleration = glm::vec3(0, -9.81f, 0);
+    state.enemies[2].width = .7f;
+
 
 }
 
@@ -343,6 +349,23 @@ void Update() {
             (state.player->lastCollidedWith)->isActive = false;
         }
     }
+    
+    for (int i = 0; i < ENEMY_COUNT; i++){
+        state.enemies[i].CheckCollisionsX(state.player, 1);
+        state.enemies[i].CheckCollisionsY(state.player, 1);
+        
+        if (state.enemies[i].lastCollided == PLAYER) {
+            if (state.enemies[i].collidedLeft || state.enemies[i].collidedRight || state.enemies[i].collidedBottom) {
+                state.enemies[i].lastCollidedWith->isActive = false;
+                gameEnd = true;
+                gameFail = true;
+            }
+            else if (state.enemies[i].collidedTop) {
+                state.enemies[i].isActive = false;
+            }
+        }
+    }
+    
     if (!state.enemies[0].isActive &&
         !state.enemies[1].isActive &&
         !state.enemies[2].isActive) {
@@ -356,7 +379,7 @@ void Render() {
     
     if (instructions) {
         DrawText(&program, fontTextureID, "Press Spacebar to jump", 0.5f, -0.25f, glm::vec3(-4.5f, 3.0f, 0));
-        DrawText(&program, fontTextureID, "Jump an Enemy's head to Defeat it", 0.5f, -0.25f, glm::vec3(-4.5f, 2.5f, 0));
+        DrawText(&program, fontTextureID, "Jump on Enemy's Head to Defeat it", 0.5f, -0.25f, glm::vec3(-4.5f, 2.5f, 0));
     }
     
     for (int i = 0; i < PLATFORM_COUNT; i++){
@@ -370,15 +393,14 @@ void Render() {
     state.player->Render(&program);
     
     if (gameSuccess){
-        DrawText(&program, fontTextureID, "You Win", 0.5f, -0.25f, glm::vec3(-2.0f, 0, 0));
+        DrawText(&program, fontTextureID, "You Win", 0.5f, -0.25f, glm::vec3(-1.0f, 0, 0));
     }
     else if (gameFail){
-        DrawText(&program, fontTextureID, "You Lose", 0.5f, -0.25f, glm::vec3(-2.0f, 0, 0));
+        DrawText(&program, fontTextureID, "You Lose", 0.5f, -0.25f, glm::vec3(-1.0f, 0, 0));
     }
     
     SDL_GL_SwapWindow(displayWindow);
 }
-
 
 void Shutdown() {
     SDL_Quit();

@@ -60,12 +60,15 @@ void Entity::CheckCollisionsX(Entity *objects, int objectCount) {
                 velocity.x = 0;
                 collidedRight = true;
                 lastCollided = object->entityType;
+                lastCollidedWith = object;
+
             }
             else if (velocity.x < 0) {
                 position.x += penetrationX;
                 velocity.x = 0;
                 collidedLeft = true;
                 lastCollided = object->entityType;
+                lastCollidedWith = object;
             }
         }
     }
@@ -129,7 +132,7 @@ void Entity::AIAggressive(Entity* player){
             break;
         case ATTACKING:
             if (walkRight){
-                movement = glm::vec3(2, 0, 0);
+                movement = glm::vec3(1.5, 0, 0);
                 if (position.x > glm::vec3(4.5).x){
                     switchWalk();
                     velocity.y += 3.0f;
@@ -139,7 +142,7 @@ void Entity::AIAggressive(Entity* player){
                 }
             }
             if (walkLeft){
-                movement = glm::vec3(-2, 0, 0);
+                movement = glm::vec3(-1.5, 0, 0);
                 if (position.x < glm::vec3(2.75).x){
                     switchWalk();
                     velocity.y += 3.0f;
@@ -167,6 +170,7 @@ void Entity::AIPatrol() {
                     switchWalk();
                 }
             }
+            break;
     }
 }
 
