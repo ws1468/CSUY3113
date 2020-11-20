@@ -34,8 +34,11 @@ Scene *sceneList[4];
 
 int lives = 3;
 bool death = false;
-bool gameSuccess = false;
-bool gameFail = false;
+
+int gameWinsound = 0;
+int gameFailsound = 0;
+//bool gameSuccess = false;
+//bool gameFail = false;
 bool gameEnd = false;
 
 void SwitchToScene(Scene *scene) {
@@ -190,21 +193,16 @@ void Update() {
         viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 3.75, 0));
     }*/
     
-    if (currentScene->state.player->position.y < - 9)
-    {
-        death = true;
-    }
-    
     if (currentScene->state.player->killPlayer){
         death = true;
         currentScene->state.player->killPlayer = false;
-    }
-    
-    if (currentScene->state.player->lastCollided == ENEMY) {
+    } else if (currentScene->state.player->lastCollided == ENEMY) {
         if (currentScene->state.player->collidedLeft || currentScene->state.player->collidedRight || currentScene->state.player->collidedTop || currentScene->state.player->collidedBottom) {
             death = true;
         }
         currentScene->state.player->lastCollided = PLATFORM;
+    } else if (currentScene->state.player->position.y < - 9) {
+        death = true;
     }
     
     if (death == true && lives > 0){
@@ -214,10 +212,9 @@ void Update() {
         if (lives != 0){
             currentScene->state.player->position = glm::vec3(1, -3.5, 0);
         }
-    }
-    if (lives == 0){
+    } else if (lives == 0){
         death = false;
-        Mix_PlayChannel(-1, gameLose, 0);
+        //Mix_PlayChannel(-1, gameLose, 1);
         currentScene->state.player->isActive = false;
         currentScene->gameEnd = true;
         currentScene->gameFail = true;
@@ -262,11 +259,20 @@ void Render() {
     } */
         
     if (currentScene->gameSuccess){
-        Mix_PlayChannel(-1, gameWin, 0);
+        //Mix_PlayChannel(-1, gameWin, 0);
+        gameWinsound += 1;
         Util::DrawText(&program, fontTextureID, "You Win", 0.5f, -0.25f, endText);
     }
     else if (currentScene->gameFail){
+        //Mix_PlayChannel(-1, gameLose, 1);
+        gameFailsound += 1;
         Util::DrawText(&program, fontTextureID, "You Lose", 0.5f, -0.25f, endText);
+    }
+    
+    if (gameWinsound == 1){
+        Mix_PlayChannel(-1, gameWin, 0);
+    } else if (gameFailsound == 1){
+        Mix_PlayChannel(-1, gameLose, 0);
     }
     
     if (currentScene != sceneList[0]) Util::DrawText(&program, fontTextureID, "Lives " + std::to_string(lives), 0.5, -0.1, livesText);

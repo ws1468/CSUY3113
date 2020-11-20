@@ -313,6 +313,7 @@ void Entity::Update(float deltaTime, Entity *player, Entity *objects, int object
                 //lastCollidedWith->isActive = false;
                 player->killPlayer = true;
             }
+            
             lastCollidedWith = this;
         }
     }
