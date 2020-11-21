@@ -206,10 +206,10 @@ void Update() {
     }
     
     if (death == true && lives > 0){
-        Mix_PlayChannel(-1, dies, 0);
         lives -= 1;
         death = false;
         if (lives != 0){
+            Mix_PlayChannel(-1, dies, 0);
             currentScene->state.player->position = glm::vec3(1, -3.5, 0);
         }
     } else if (lives == 0){
@@ -260,12 +260,16 @@ void Render() {
         
     if (currentScene->gameSuccess){
         //Mix_PlayChannel(-1, gameWin, 0);
-        gameWinsound += 1;
+        if (gameWinsound <=2){
+            gameWinsound += 1;
+        }
         Util::DrawText(&program, fontTextureID, "You Win", 0.5f, -0.25f, endText);
     }
     else if (currentScene->gameFail){
         //Mix_PlayChannel(-1, gameLose, 1);
-        gameFailsound += 1;
+        if (gameFailsound <= 2){
+            gameFailsound += 1;
+        }
         Util::DrawText(&program, fontTextureID, "You Lose", 0.5f, -0.25f, endText);
     }
     
