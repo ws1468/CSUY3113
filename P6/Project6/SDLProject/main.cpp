@@ -16,6 +16,7 @@
 #include "Entity.h"
 #include "Map.h"
 #include "Scene.h"
+#include "Menu.h"
 #include "Level1.h"
 #include "Level2.h"
 
@@ -26,7 +27,7 @@ ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
 Scene *currentScene;
-Scene *sceneList[2];
+Scene *sceneList[3];
 
 Effects *effects;
 void SwitchToScene(Scene *scene) {
@@ -60,13 +61,14 @@ void Initialize() {
     
     glUseProgram(program.programID);
     
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glEnable(GL_BLEND);
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    sceneList[0] = new Level1();
-    sceneList[1] = new Level2();
+    sceneList[0] = new Menu();
+    sceneList[1] = new Level1();
+    sceneList[2] = new Level2();
     SwitchToScene(sceneList[0]);
     
     effects = new Effects(projectionMatrix, viewMatrix);
@@ -91,7 +93,6 @@ void ProcessInput() {
                     case SDLK_LEFT:
                         // Move the player left
                         break;
-                        
                     case SDLK_RIGHT:
                         // Move the player right
                         break;
@@ -101,33 +102,39 @@ void ProcessInput() {
                         //    currentScene->state.player->jump = true;
                         //}
                         break;
+                    case SDLK_RETURN:
+                    if (currentScene == sceneList[0]){
+                        currentScene->state.nextScene = 2;
+                    }
                 }
                 break; // SDL_KEYDOWN
         }
     }
     
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
-
-    if (keys[SDL_SCANCODE_LEFT]) {
-        currentScene->state.player->movement.x = -1.0f;
-        currentScene->state.player->animIndices = currentScene->state.player->animLeft;
-    }
-    else if (keys[SDL_SCANCODE_RIGHT]) {
-        currentScene->state.player->movement.x = 1.0f;
-        currentScene->state.player->animIndices = currentScene->state.player->animRight;
-    }
     
-    if (keys[SDL_SCANCODE_DOWN]) {
-        currentScene->state.player->movement.y = -1.0f;
-        currentScene->state.player->animIndices = currentScene->state.player->animDown;
-    }
-    else if (keys[SDL_SCANCODE_UP]) {
-        currentScene->state.player->movement.y = 1.0f;
-        currentScene->state.player->animIndices = currentScene->state.player->animUp;
-    }
+    if (currentScene != sceneList[0]){
+        if (keys[SDL_SCANCODE_LEFT]) {
+            currentScene->state.player->movement.x = -1.0f;
+            currentScene->state.player->animIndices = currentScene->state.player->animLeft;
+        }
+        else if (keys[SDL_SCANCODE_RIGHT]) {
+            currentScene->state.player->movement.x = 1.0f;
+            currentScene->state.player->animIndices = currentScene->state.player->animRight;
+        }
+        
+        if (keys[SDL_SCANCODE_DOWN]) {
+            currentScene->state.player->movement.y = -1.0f;
+            currentScene->state.player->animIndices = currentScene->state.player->animDown;
+        }
+        else if (keys[SDL_SCANCODE_UP]) {
+            currentScene->state.player->movement.y = 1.0f;
+            currentScene->state.player->animIndices = currentScene->state.player->animUp;
+        }
 
-    if (glm::length(currentScene->state.player->movement) > 1.0f) {
-        currentScene->state.player->movement = glm::normalize(currentScene->state.player->movement);
+        if (glm::length(currentScene->state.player->movement) > 1.0f) {
+            currentScene->state.player->movement = glm::normalize(currentScene->state.player->movement);
+        }
     }
 }
 
@@ -151,7 +158,7 @@ void Update() {
     while (deltaTime >= FIXED_TIMESTEP) { //if enough time has passed
     // Update. Notice it's FIXED_TIMESTEP. Not deltaTime
         currentScene->Update(FIXED_TIMESTEP);
-        
+    
         program.SetLightPosition(currentScene->state.player->position);
 
         /*
@@ -168,11 +175,29 @@ void Update() {
     accumulator = deltaTime;
     
     viewMatrix = glm::mat4(1.0f);
+    /*
     if (currentScene->state.player->position.x > 5) {
         viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75, 0));
     } else {
         viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 3.75, 0));
+    }*/
+    
+    viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, -currentScene->state.player->position.y, 0));
+    
+    /*
+    if (currentScene->state.player->position.x > 5 && (currentScene->state.player->position.y > 3.75 || currentScene->state.player->position.y < -3.75)) {
+        viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, -currentScene->state.player->position.y, 0));
     }
+    else if (currentScene->state.player->position.y > 3.75 || currentScene->state.player->position.y < -3.75 ) {
+        viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, -currentScene->state.player->position.y, 0));
+    }
+    else if (currentScene->state.player->position.x > 5) {
+        viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75, 0));
+    } else {
+        viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 3.75, 0));
+    }
+    */
+    
     
     viewMatrix = glm::translate(viewMatrix, effects->viewOffset);
 }
@@ -183,12 +208,14 @@ void Render() {
     program.SetViewMatrix(viewMatrix);
 
     glUseProgram(program.programID);
+    
     currentScene->Render(&program);
     
     effects->Render();
     //effects last
     
     SDL_GL_SwapWindow(displayWindow);
+    
 }
 
 void Shutdown() {

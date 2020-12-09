@@ -19,7 +19,13 @@ struct GameState {
     Map *map;
     Entity *player;
     Entity *enemies;
+    Entity *items;
+    
     int nextScene;
+    
+    int keysReq;
+    int keysAcq;
+    bool doorUnlocked;
 };
 
 class Scene {

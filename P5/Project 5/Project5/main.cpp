@@ -228,7 +228,6 @@ void Render() {
 
     currentScene->Render(&program);
         
-    
     GLuint fontTextureID = Util::LoadTexture("font1.png");
     
     glm::vec3 endText, livesText;

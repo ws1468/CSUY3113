@@ -14,14 +14,16 @@
 #include "Map.h"
 
 //enum EntityType {PLAYER, PLATFORM, ENEMY};
-enum EntityType {PLAYER, ENEMY};
-
-enum AIType { WALKER, WAITANDGO };
-enum AIState {IDLE, WALKING, ATTACKING};
+enum EntityType {PLAYER, ENEMY, ITEM};
+//enum AIType { WALKER, WAITANDGO };
+enum AIType {XPATROL, YPATROL};
+enum AIState {IDLE, WALKING};
+enum ItemType {KEY, DOOR};
 
 class Entity {
 public:
     EntityType entityType;
+    ItemType itemType;
     AIType aiType;
     AIState aiState;
     
@@ -46,7 +48,7 @@ public:
     int *animLeft = NULL;
     int *animUp = NULL;
     int *animDown = NULL;
-
+    
     int *animIndices = NULL;
     int animFrames = 0;
     int animIndex = 0;
@@ -61,7 +63,19 @@ public:
     bool collidedLeft = false;
     bool collidedRight = false;
     
+    //for enemy patroller
+    bool walkLeft = false;
+    bool walkRight = true;
+    
+    bool walkDown = true;
+    bool walkUp = false;
+    
     Entity();
+   
+    EntityType lastCollided;
+    Entity* lastCollidedWith;
+    ItemType itemCollided;
+
     
     bool CheckCollision(Entity *other);
     void CheckCollisionsY(Entity *objects, int objectCount);
@@ -69,11 +83,17 @@ public:
     void CheckCollisionsX(Map *map);
     void CheckCollisionsY(Map *map);
     
-    void Update(float deltaTime, Entity *player, Entity *objects, int objectCount, Map *map);
+    void Update(float deltaTime, Entity *player, Entity *objects, int objectCount, Entity *items, int itemCount, Map *map);
     void Render(ShaderProgram *program);
     void DrawSpriteFromTextureAtlas(ShaderProgram *program, GLuint textureID, int index);
     
     void AI(Entity *player);
-    void AIWalker();
-    void AIWaitAndGo(Entity *player);
+    //void AIWalker();
+    //void AIWaitAndGo(Entity *player);
+    
+    void switchXWalk();
+    void switchYWalk();
+    void AIxPatrol();
+    void AIyPatrol();
+    //void AIPatrol();
 };

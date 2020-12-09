@@ -13,6 +13,8 @@ Entity::Entity()
 
 bool Entity::CheckCollision(Entity *other){
     
+    if (other == this) return false;
+    
     if (isActive == false || other->isActive == false) return false;
     
     float xdist = fabs(position.x - other->position.x) - ((width + other->width) / 2.0f);
@@ -34,11 +36,15 @@ void Entity::CheckCollisionsY(Entity *objects, int objectCount) {
                 position.y -= penetrationY;
                 velocity.y = 0;
                 collidedTop = true;
+                lastCollided = object->entityType;
+                lastCollidedWith = object;
             }
             else if (velocity.y < 0) {
                 position.y += penetrationY;
                 velocity.y = 0;
                 collidedBottom = true;
+                lastCollided = object->entityType;
+                lastCollidedWith = object;
             }
         }
     }
@@ -47,7 +53,7 @@ void Entity::CheckCollisionsY(Entity *objects, int objectCount) {
 void Entity::CheckCollisionsX(Entity *objects, int objectCount) {
     for (int i = 0; i < objectCount; i++) {
         Entity *object = &objects[i];
-        
+                
         if (CheckCollision(object)) {
             float xdist = fabs(position.x - object->position.x);
             float penetrationX = fabs(xdist - (width / 2.0f) - (object->width / 2.0f));
@@ -55,11 +61,15 @@ void Entity::CheckCollisionsX(Entity *objects, int objectCount) {
                 position.x -= penetrationX;
                 velocity.x = 0;
                 collidedRight = true;
+                lastCollided = object->entityType;
+                lastCollidedWith = object;
             }
             else if (velocity.x < 0) {
                 position.x += penetrationX;
                 velocity.x = 0;
                 collidedLeft = true;
+                lastCollided = object->entityType;
+                lastCollidedWith = object;
             }
         }
     }
@@ -130,53 +140,91 @@ void Entity::CheckCollisionsX(Map *map) {
     }
 }
 
-void Entity::AIWalker() {
-    movement = glm::vec3(-1, 0, 0);
+void Entity::switchXWalk(){
+    if (walkLeft){
+        walkLeft = false;
+        walkRight = true;
+    } else {
+        walkLeft = true;
+        walkRight = false;
+    }
 }
 
-void Entity::AIWaitAndGo(Entity *player){
+void Entity::switchYWalk(){
+    if (walkUp){
+        walkUp = false;
+        walkDown = true;
+    } else {
+        walkUp = true;
+        walkDown = false;
+    }
+}
+
+void Entity::AIxPatrol(){
     switch (aiState){
-        case IDLE:
-            if (glm::distance(position, player->position) < 3.0f){
-                aiState = WALKING;
-            }
-            break;
         case WALKING:
-            if (player->position.x < position.x){
-                movement = glm::vec3(-1,0,0);
-            } else {
-                movement = glm::vec3(1,0,0);
+            if (walkLeft){
+                movement = glm::vec3(-2,0,0);
+                if (collidedLeft){
+                    switchXWalk();
+                }
+            }
+            if (walkRight){
+                movement = glm::vec3(2,0,0);
+                if (collidedRight){
+                    switchXWalk();
+                }
             }
             break;
-            
-        case ATTACKING:
+        case IDLE:
+            break;
+    }
+}
+
+void Entity::AIyPatrol(){
+    switch (aiState){
+        case WALKING:
+            if (walkDown){
+                movement = glm::vec3(0,-2,0);
+                if (collidedBottom){
+                    switchYWalk();
+                }
+            }
+            if (walkUp){
+                movement = glm::vec3(0,2,0);
+                if (collidedTop){
+                    switchYWalk();
+                }
+            }
+            break;
+        case IDLE:
             break;
     }
 }
 
 void Entity::AI(Entity *player) {
     switch(aiType){
-        case WALKER:
-            AIWalker();
+        case XPATROL:
+            AIxPatrol();
             break;
-        case WAITANDGO:
-            AIWaitAndGo(player);
+        case YPATROL:
+            AIyPatrol();
             break;
     }
 }
 
-void Entity::Update(float deltaTime, Entity *player, Entity *objects, int objectCount, Map *map)
-{
+void Entity::Update(float deltaTime, Entity *player, Entity *objects, int objectCount, Entity *items, int itemCount, Map *map) {
+    
     if (isActive == false) return;
+    
+    if (entityType == ENEMY){
+        AI(player);
+    }
     
     collidedTop = false;
     collidedBottom = false;
     collidedLeft = false;
     collidedRight = false;
-    
-    if (entityType == ENEMY){
-        AI(player);
-    }
     
     if (animIndices != NULL) {
         if (glm::length(movement) != 0) {
@@ -196,12 +244,14 @@ void Entity::Update(float deltaTime, Entity *player, Entity *objects, int object
         }
     }
     
-    if (jump){
-        jump = false;
-        velocity.y += jumpPower;
-    }
+    //if (jump){
+    //    jump = false;
+    //    velocity.y += jumpPower;
+    //}
     
+    //movemenr
     velocity.x = movement.x * speed;
+    velocity.y = movement.y * speed;
     velocity += acceleration * deltaTime;
             
     position.y += velocity.y * deltaTime;       //move on Y
@@ -214,6 +264,9 @@ void Entity::Update(float deltaTime, Entity *player, Entity *objects, int object
     
     modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
+    
+    
+    // ----ADDING COLLISION CHECK HERE LATER----
 }
 
 void Entity::DrawSpriteFromTextureAtlas(ShaderProgram *program, GLuint textureID, int index)
