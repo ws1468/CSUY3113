@@ -107,6 +107,10 @@ void Level1::Update(float deltaTime) {
     //if (state.player->position.x >= 12) {
     //    state.nextScene = 1;
     //}
+    if (state.player->position.x >= 12) {
+    //    state.nextScene = 1;
+    //}
+    /*
     if (state.player->lastCollided == ITEM) {
         if (state.player->lastCollidedWith->itemType == DOOR){
             if (state.doorUnlocked == true){
@@ -114,6 +118,7 @@ void Level1::Update(float deltaTime) {
             }
         }
     }
+     */
 }
 
 void Level1::Render(ShaderProgram *program) {
