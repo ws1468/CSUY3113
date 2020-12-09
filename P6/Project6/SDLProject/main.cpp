@@ -104,7 +104,7 @@ void ProcessInput() {
                         break;
                     case SDLK_RETURN:
                     if (currentScene == sceneList[0]){
-                        currentScene->state.nextScene = 1;
+                        currentScene->state.nextScene = 2;
                     }
                 }
                 break; // SDL_KEYDOWN
