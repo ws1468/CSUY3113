@@ -217,10 +217,6 @@ void Entity::Update(float deltaTime, Entity *player, Entity *objects, int object
     
     if (isActive == false) return;
     
-    if (entityType == ENEMY){
-        AI(player);
-    }
-    
     collidedTop = false;
     collidedBottom = false;
     collidedLeft = false;
@@ -267,6 +263,19 @@ void Entity::Update(float deltaTime, Entity *player, Entity *objects, int object
     
     
     // ----ADDING COLLISION CHECK HERE LATER----
+    if (entityType == ENEMY){
+        AI(player);
+        
+        CheckCollisionsX(player, 1);
+        CheckCollisionsY(player, 1);
+            
+        if (lastCollidedWith == player) {
+            if (collidedLeft || collidedRight || collidedTop || collidedBottom) {
+                lastCollidedWith->isActive = false;
+            }
+            lastCollidedWith = this;
+        }
+    }
 }
 
 void Entity::DrawSpriteFromTextureAtlas(ShaderProgram *program, GLuint textureID, int index)

@@ -30,6 +30,10 @@ struct GameState {
 
 class Scene {
 public:
+    bool gameSuccess = false;
+    bool gameFail = false;
+    bool gameEnd = false;
+
     GameState state;
     virtual void Initialize() = 0;
     virtual void Update(float deltaTime) = 0;

@@ -97,15 +97,21 @@ void Level1::Initialize() {
 void Level1::Update(float deltaTime) {
     state.player->Update(deltaTime, state.player, state.enemies, LEVEL1_ENEMY_COUNT, state.items, LEVEL1_ITEM_COUNT, state.map);
     
+    for (int i = 0; i < LEVEL1_ENEMY_COUNT; i++) {
+        state.enemies[i].Update(deltaTime, state.player, state.enemies, LEVEL1_ENEMY_COUNT, state.items, LEVEL1_ITEM_COUNT, state.map);
+    }
+    
     for (int i = 0; i < LEVEL1_ITEM_COUNT; i++) {
-        state.items[i].Update(deltaTime, state.player, state.enemies, LEVEL1_ITEM_COUNT, state.items, LEVEL1_ITEM_COUNT, state.map);
+        state.items[i].Update(deltaTime, state.player, state.enemies, LEVEL1_ENEMY_COUNT, state.items, LEVEL1_ITEM_COUNT, state.map);
     }
     //if (state.player->position.x >= 12) {
     //    state.nextScene = 1;
     //}
     if (state.player->lastCollided == ITEM) {
         if (state.player->lastCollidedWith->itemType == DOOR){
-            state.nextScene = 2;
+            if (state.doorUnlocked == true){
+                state.nextScene = 2;
+            }
         }
     }
 }
@@ -113,7 +119,9 @@ void Level1::Update(float deltaTime) {
 void Level1::Render(ShaderProgram *program) {
     state.map->Render(program);
     state.player->Render(program);
-
+    for (int i = 0; i < LEVEL1_ENEMY_COUNT; i++){
+        state.enemies[i].Render(program);
+    }
     for (int i = 0; i < LEVEL1_ITEM_COUNT; i++){
         state.items[i].Render(program);
     }

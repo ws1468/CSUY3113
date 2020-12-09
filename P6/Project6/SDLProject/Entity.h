@@ -15,10 +15,9 @@
 
 //enum EntityType {PLAYER, PLATFORM, ENEMY};
 enum EntityType {PLAYER, ENEMY, ITEM};
-//enum AIType { WALKER, WAITANDGO };
 enum AIType {XPATROL, YPATROL};
 enum AIState {IDLE, WALKING};
-enum ItemType {KEY, DOOR};
+enum ItemType {NOITEM, KEY, DOOR};
 
 class Entity {
 public:
@@ -35,8 +34,8 @@ public:
     float width = 1;
     float height = 1;
     
-    bool jump = false;
-    float jumpPower = 0;
+    //bool jump = false;
+    //float jumpPower = 0;
     
     float speed;
     
@@ -69,13 +68,12 @@ public:
     
     bool walkDown = true;
     bool walkUp = false;
-    
+        
     Entity();
    
     EntityType lastCollided;
     Entity* lastCollidedWith;
-    ItemType itemCollided;
-
+    ItemType itemCollided = NOITEM;
     
     bool CheckCollision(Entity *other);
     void CheckCollisionsY(Entity *objects, int objectCount);
@@ -90,7 +88,6 @@ public:
     void AI(Entity *player);
     //void AIWalker();
     //void AIWaitAndGo(Entity *player);
-    
     void switchXWalk();
     void switchYWalk();
     void AIxPatrol();

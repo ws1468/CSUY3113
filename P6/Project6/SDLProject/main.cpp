@@ -30,6 +30,12 @@ Scene *currentScene;
 Scene *sceneList[3];
 
 Effects *effects;
+
+//bool gameSuccess = false;
+//bool gameFail = false;
+//bool gameEnd = false;
+bool missingKeys = false;
+
 void SwitchToScene(Scene *scene) {
     currentScene = scene;
     currentScene->Initialize();
@@ -96,15 +102,9 @@ void ProcessInput() {
                     case SDLK_RIGHT:
                         // Move the player right
                         break;
-                        
-                    case SDLK_SPACE:
-                        //if (currentScene->state.player->collidedBottom){
-                        //    currentScene->state.player->jump = true;
-                        //}
-                        break;
                     case SDLK_RETURN:
                     if (currentScene == sceneList[0]){
-                        currentScene->state.nextScene = 2;
+                        currentScene->state.nextScene = 1;
                     }
                 }
                 break; // SDL_KEYDOWN
@@ -142,8 +142,6 @@ void ProcessInput() {
 float lastTicks = 0;
 float accumulator = 0.0f;
 
-//bool lastCollidedBottom = false;
-
 void Update() {
     float ticks = (float)SDL_GetTicks() / 1000.0f;
     float deltaTime = ticks - lastTicks;
@@ -160,13 +158,6 @@ void Update() {
         currentScene->Update(FIXED_TIMESTEP);
     
         program.SetLightPosition(currentScene->state.player->position);
-
-        /*
-        if (lastCollidedBottom == false && currentScene->state.player->collidedBottom){
-            // effects->Start(SHAKE, 4.0f);
-        }
-        lastCollidedBottom = currentScene->state.player->collidedBottom;
-        */
         
         effects->Update(FIXED_TIMESTEP);
         
@@ -181,25 +172,28 @@ void Update() {
     } else {
         viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 3.75, 0));
     }*/
-    
-    viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, -currentScene->state.player->position.y, 0));
-    
-    /*
-    if (currentScene->state.player->position.x > 5 && (currentScene->state.player->position.y > 3.75 || currentScene->state.player->position.y < -3.75)) {
-        viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, -currentScene->state.player->position.y, 0));
-    }
-    else if (currentScene->state.player->position.y > 3.75 || currentScene->state.player->position.y < -3.75 ) {
-        viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, -currentScene->state.player->position.y, 0));
-    }
-    else if (currentScene->state.player->position.x > 5) {
-        viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75, 0));
-    } else {
-        viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 3.75, 0));
-    }
-    */
-    
+    viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, -currentScene->state.player->position.y, 0));    
     
     viewMatrix = glm::translate(viewMatrix, effects->viewOffset);
+    
+    if (currentScene->state.player->collidedLeft || currentScene->state.player->collidedRight || currentScene->state.player->collidedTop || currentScene->state.player->collidedBottom) {
+        if (currentScene->state.player->lastCollided == ENEMY) {
+            currentScene->state.player->isActive = false;
+            currentScene->gameFail = true;
+            currentScene->gameEnd = true;
+        } else if (currentScene->state.player->lastCollided == ITEM){
+            if (currentScene->state.player->lastCollidedWith->itemType == KEY){
+                currentScene->state.keysAcq += 1;
+                currentScene->state.player->lastCollidedWith->isActive = false;
+            } else if (currentScene->state.player->lastCollidedWith->itemType == DOOR) {
+                if (currentScene->state.keysAcq == currentScene->state.keysReq) {
+                    currentScene->state.doorUnlocked = true;
+                } else {
+                    missingKeys = true;
+                }
+            }
+        }
+    }
 }
 
 void Render() {
@@ -210,6 +204,30 @@ void Render() {
     glUseProgram(program.programID);
     
     currentScene->Render(&program);
+    
+    /*
+     GLuint fontTextureID = Util::LoadTexture("font1.png");
+     glm::vec3 endText;
+     
+     if (currentScene->state.player->position.x > 5) {
+         endText = glm::vec3(currentScene->state.player->position.x -2, -2, 0);
+     } else {
+         endText = glm::vec3(3, -3, 0);
+     }
+     
+     if (missingKeys){
+        Util::DrawText(&program, fontTextureID, "Missing Keys...", 0.5f, -0.25f, endText);
+        missingKeys = false;
+     }
+     
+    if (currentScene->gameSuccess){
+        Util::DrawText(&program, fontTextureID, "You Win", 0.5f, -0.25f, endText);
+
+    } else if (currentScene->gameFail){
+        Util::DrawText(&program, fontTextureID, "You Lose", 0.5f, -0.25f, endText);
+    }
+     */
+    
     
     effects->Render();
     //effects last
